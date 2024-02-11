@@ -1,35 +1,43 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { ProductImage } from "./";
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { ProductImage } from './';
+import { User } from 'src/auth/entities/user.entity';
 
 @Entity({ name: 'products' })
 export class Product {
-
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('text', {
-    unique: true
+    unique: true,
   })
   title: string;
 
   @Column('float', {
-    default: 0
+    default: 0,
   })
   price: number;
 
   @Column({
     type: 'text',
-    nullable: true
+    nullable: true,
   })
   description: string;
 
   @Column('text', {
-    unique: true
+    unique: true,
   })
   slug: string;
 
   @Column('int', {
-    default: 0
+    default: 0,
   })
   stock: number;
 
@@ -43,29 +51,30 @@ export class Product {
 
   @Column('text', {
     array: true,
-    default: []
+    default: [],
   })
   tags: string[];
 
+  @OneToMany(() => ProductImage, (productImage) => productImage.product, {
+    cascade: true,
+    eager: true,
+  })
+  images?: ProductImage[];
 
-  @OneToMany(
-    () => ProductImage,
-    (productImage) => productImage.product,
-    { cascade: true, eager: true }
-  )
-  images?: ProductImage[]
-
-
+  @ManyToOne(() => User, (user) => user.product, {
+    onDelete: 'CASCADE',
+  })
+  user: User;
 
   @BeforeInsert()
   @BeforeUpdate()
-  checkSlug() {
+  checkSlug = () => {
     if (!this.slug) {
-      this.slug = this.title
+      this.slug = this.title;
     }
     this.slug = this.slug
       .toLowerCase()
       .replaceAll(' ', '-')
       .replaceAll("'", '');
-  }
+  };
 }

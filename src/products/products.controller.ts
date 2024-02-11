@@ -1,21 +1,38 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseUUIDPipe,
+  Query,
+} from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { PaginationDto } from '../common/dtos/pagination.dto';
+import { Auth, GetUser } from 'src/auth/decorators';
+import { ValidRoles } from 'src/auth/interfaces';
+import { User } from 'src/auth/entities/user.entity';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) { }
+  constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  async create(@Body() createProductDto: CreateProductDto): Promise<Product> {
-    return await this.productsService.create(createProductDto);
+  @Auth()
+  async create(
+    @Body() createProductDto: CreateProductDto,
+    @GetUser() user: User,
+  ): Promise<Product> {
+    return await this.productsService.create(createProductDto, user);
   }
 
   @Get()
-  async findAll(@Query() paginationDto: PaginationDto): Promise<Product[]> {
+  async findAll(@Query() paginationDto: PaginationDto) {
     return this.productsService.findAll(paginationDto);
   }
 
@@ -25,11 +42,17 @@ export class ProductsController {
   }
 
   @Patch(':id')
-  async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateProductDto: UpdateProductDto) {
-    return await this.productsService.update(id, updateProductDto);
+  @Auth(ValidRoles.ADMIN)
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateProductDto: UpdateProductDto,
+    @GetUser() user: User,
+  ) {
+    return await this.productsService.update(id, updateProductDto, user);
   }
 
   @Delete(':id')
+  @Auth(ValidRoles.ADMIN)
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     return await this.productsService.remove(id);
   }
