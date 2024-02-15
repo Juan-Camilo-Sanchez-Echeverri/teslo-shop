@@ -1,4 +1,3 @@
-import { join } from 'path';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,8 +6,8 @@ import { CommonModule } from './common/common.module';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { SeedModule } from './seed/seed.module';
 import { FilesModule } from './files/files.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { AuthModule } from './auth/auth.module';
+import { MessagesWsModule } from './messages-ws/messages-ws.module';
 
 @Module({
   imports: [
@@ -18,6 +17,13 @@ import { AuthModule } from './auth/auth.module';
       port: 8000,
     }),
     TypeOrmModule.forRoot({
+      ssl: process.env.NODE_ENV === 'production' ? true : false,
+      extra: {
+        ssl:
+          process.env.NODE_ENV === 'production'
+            ? { rejectUnauthorized: false }
+            : null,
+      },
       type: 'postgres',
       host: process.env.DB_HOST,
       port: +process.env.DB_PORT,
@@ -27,14 +33,12 @@ import { AuthModule } from './auth/auth.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
-    }),
     ProductsModule,
     CommonModule,
     SeedModule,
     FilesModule,
     AuthModule,
+    MessagesWsModule,
   ],
 })
 export class AppModule {}

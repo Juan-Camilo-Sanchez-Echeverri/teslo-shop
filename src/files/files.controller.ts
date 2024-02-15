@@ -2,10 +2,7 @@ import {
   Controller,
   Get,
   Post,
-  Body,
-  Patch,
   Param,
-  Delete,
   UploadedFile,
   UseInterceptors,
   BadRequestException,
@@ -17,7 +14,9 @@ import { fileFilter, fileNamer } from './helpers/';
 import { diskStorage } from 'multer';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('files')
 @Controller('files')
 export class FilesController {
   constructor(
