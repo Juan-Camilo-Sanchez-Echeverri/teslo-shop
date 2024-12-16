@@ -15,7 +15,9 @@ import { diskStorage } from 'multer';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { ApiTags } from '@nestjs/swagger';
+import * as path from 'path';
 
+const PRODUCT_IMAGES_ROOT = path.resolve('./static/products');
 @ApiTags('files')
 @Controller('files')
 export class FilesController {
@@ -29,8 +31,12 @@ export class FilesController {
     @Param('imageName') imageName: string,
     @Res() res: Response,
   ) {
-    const path = this.filesService.getStaticProductImage(imageName);
-    res.sendFile(path);
+    const imagePath = path.resolve(PRODUCT_IMAGES_ROOT, imageName);
+    if (!imagePath.startsWith(PRODUCT_IMAGES_ROOT)) {
+      res.status(403).send('Forbidden');
+      return;
+    }
+    res.sendFile(imagePath);
   }
 
   @Post('product')
