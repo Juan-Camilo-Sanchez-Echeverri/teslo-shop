@@ -773,11 +773,12 @@
     path-to-regexp "3.2.0"
     tslib "2.6.2"
 
-"@nestjs/devtools-integration@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@nestjs/devtools-integration/-/devtools-integration-0.1.5.tgz#373aebe93632dd0f1bc46b714c6720951f35f87b"
-  integrity sha512-iwxvfxa3kzOulG/Fje82Ww80OVsA8rzYR+UAEKrdGExRRGQRGQ0+bHfG0XLlPG3XIuM5J2MRMo7x1bN8ZIs9Gg==
+"@nestjs/devtools-integration@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@nestjs/devtools-integration/-/devtools-integration-0.2.1.tgz#b9844baced91b4c4689e19aded5ef2ec8dbecc10"
+  integrity sha512-6UYnfMlAI6DLwNCPTjuVp1NVZd7JaczwVrdo10kb3fepz0uzcxzLAEORaPYPiSjVaH88UgfB35BR7/1p/+1/bg==
   dependencies:
+    "@nyariv/sandboxjs" "0.8.25"
     chalk "^4.1.2"
     node-fetch "^2.6.9"
 
@@ -905,6 +906,11 @@
     chalk "^4.1.0"
     consola "^2.15.0"
     node-fetch "^2.6.1"
+
+"@nyariv/sandboxjs@0.8.25":
+  version "0.8.25"
+  resolved "https://registry.yarnpkg.com/@nyariv/sandboxjs/-/sandboxjs-0.8.25.tgz#ce6bd25a992d444d26916e31c84fe20d06c9b145"
+  integrity sha512-Y8CAHIgVjKvG2QtVOu2hHERdpi73e7XdoX0C7MHq/sRiVvfbYFKZ9WER1GCC3aqnOK9Cxf8SDv9vWIUfhrPkhQ==
 
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
